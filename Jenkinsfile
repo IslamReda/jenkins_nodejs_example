@@ -17,6 +17,7 @@ pipeline {
                 }
             }
         }  
+        
         stage ('deploy'){
             steps{
                 withCredentials([usernamePassword(credentialsId:"test",usernameVariable:"username",passwordVariable:"pass")]){
