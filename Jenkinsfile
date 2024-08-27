@@ -22,7 +22,7 @@ pipeline {
             steps{
                 withCredentials([usernamePassword(credentialsId:"test",usernameVariable:"username",passwordVariable:"pass")]){
                 
-                sh 'docker run -p 3000:3000 -d ${username}/jenkins_sprints:v1.0'
+                sh 'docker run -d -p 3000:3000 ${username}/jenkins_sprints:v1.0'
                 }
             }
 
