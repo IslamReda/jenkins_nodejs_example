@@ -17,7 +17,7 @@ pipeline {
     post {
         success {
             withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable:"PASS")]) {
-                    sh 'docker login -u ${USER} -p ${PASS} s'
+                    sh 'docker login -u ${USER} -p ${PASS}'
                     sh 'docker push ${USER}/nodejs-app:v1.${BUILD_NUMBER}'
                     sh 'docker rm live --force'
                     sh 'docker run -d -p 3000:3000 --name live ${USER}/nodejs-app:v1.${BUILD_NUMBER}'
