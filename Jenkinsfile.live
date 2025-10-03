@@ -24,7 +24,7 @@ pipeline {
                     slackSend(
                         channel: "yat541",
                         color: "good",
-                        message: "${env.JOB_NAME} is successeded. Build no. ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open build here>)"
+                        message: "${env.JOB_NAME} is successeded. Build no. ${env.BUILD_NUMBER} (<https://hub.docker.com/repository/docker/islamreda/nodejs-app/general|Open the image>)"
                     )
                 }
         }
