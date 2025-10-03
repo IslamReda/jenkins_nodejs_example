@@ -21,6 +21,11 @@ pipeline {
                     sh 'docker push ${USER}/nodejs-app:v1.${BUILD_NUMBER}'
                     sh 'docker rm live --force'
                     sh 'docker run -d -p 3000:3000 --name live ${USER}/nodejs-app:v1.${BUILD_NUMBER}'
+                    slackSend(
+                        channel: "yat541",
+                        color: "good",
+                        message: "${env.JOB_NAME} is successeded. Build no. ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open build here>)"
+                    )
                 }
         }
         failure {
