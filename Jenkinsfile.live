@@ -17,7 +17,7 @@ pipeline {
     post {
         success {
             withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable:"PASS")]) {
-                    sh 'docker login -u ${USER} -p ${PASS}'
+                    sh 'docker login -u ${USER} -p ${PASS} s'
                     sh 'docker push ${USER}/nodejs-app:v1.${BUILD_NUMBER}'
                     sh 'docker rm live --force'
                     sh 'docker run -d -p 3000:3000 --name live ${USER}/nodejs-app:v1.${BUILD_NUMBER}'
@@ -29,7 +29,11 @@ pipeline {
                 }
         }
         failure {
-            sh 'echo "failed pipeline"'
+            slackSend(
+                        channel: "yat541",
+                        color: "danger",
+                        message: "${env.JOB_NAME} is failed. Build no. ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open build url>)"
+                    )
         }
     }
 }
