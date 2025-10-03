@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    stages {
+        stage('prep') {
+            steps {
+                git 'https://github.com/IslamReda/jenkins_nodejs_example.git'
+            }
+        }
+        stage('build') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable:"PASS")]) {
+                    sh 'docker build -t ${USER}/nodejs-app:v1.${BUILD_NUMBER} -f dockerfile .'
+                    sh 'docker login -u ${USER} -p ${PASS}'
+                    sh 'docker push ${USER}/nodejs-app:v1.${BUILD_NUMBER}'
+                }
+            }
+        }
+        stage('deploy') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable:"PASS")]) {
+                    sh 'docker run -d -p 3000:3000 --name live ${USER}/nodejs-app:v1.${BUILD_NUMBER}'
+                }
+            }
+        }
+    }
+}
