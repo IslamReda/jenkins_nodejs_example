@@ -9,7 +9,7 @@ pipeline {
         stage('build') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable:"PASS")]) {
-                    sh 'docker build -t ${USER}/nodejs-app:v1.${BUILD_NUMBER} -f dockerfile .'
+                    sh 'docker build -t ${USER}/nodejs-app:v2.${BUILD_NUMBER} -f dockerfile .'
                 }
             }
         }
@@ -18,9 +18,8 @@ pipeline {
         success {
             withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable:"PASS")]) {
                     sh 'docker login -u ${USER} -p ${PASS}'
-                    sh 'docker push ${USER}/nodejs-app:v1.${BUILD_NUMBER}'
-                    sh 'docker rm live --force'
-                    sh 'docker run -d -p 3000:3000 --name live ${USER}/nodejs-app:v1.${BUILD_NUMBER}'
+                    sh 'docker push ${USER}/nodejs-app:v2.${BUILD_NUMBER}'
+                    sh 'docker run -d -p 3000:3000 --name live ${USER}/nodejs-app:v2.${BUILD_NUMBER}'
                     slackSend(
                         channel: "yat541",
                         color: "good",
